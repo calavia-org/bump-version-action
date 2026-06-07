@@ -1,14 +1,16 @@
 # Bump Version Action
 
-A GitHub Action that bumps the version in a repository based on semantic versioning. Auto-detects the technology from common version files.
+A GitHub Composite Action that bumps version files across different technologies based on semantic versioning.
 
 ## Supported Technologies
 
-- **Ansible**: `galaxy.yml`
-- **Node.js**: `package.json`
-- **Python**: `pyproject.toml`, `setup.py`
-- **Rust**: `Cargo.toml`
-- **Generic**: `VERSION`, `version.txt`
+| Technology | Version File |
+|------------|--------------|
+| Ansible | `galaxy.yml` |
+| Node.js | `package.json` |
+| Python | `pyproject.toml`, `setup.py` |
+| Rust | `Cargo.toml` |
+| Generic | `VERSION`, `version.txt` |
 
 ## Usage
 
@@ -52,3 +54,14 @@ jobs:
       - run: |
           echo "New version: ${{ steps.bump.outputs.new-version }}"
 ```
+
+## How It Works
+
+1. **Auto-detects** the technology from common version files in the repository root
+2. **Reads** the current version from the detected file
+3. **Applies** semantic versioning bump based on the provided `bump-type`
+4. **Writes** the new version back to the file
+
+## Release
+
+This action uses an automated release workflow that creates semantic version tags from conventional commits on push to `main`.
