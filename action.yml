@@ -49,7 +49,28 @@ runs:
         if [ "$VERSION_FILE" != "auto" ] && [ -f "$VERSION_FILE" ]; then
           echo "Using provided version file: $VERSION_FILE"
           echo "version_file=$VERSION_FILE" >> "$GITHUB_OUTPUT"
-          echo "technology=manual" >> "$GITHUB_OUTPUT"
+          # Infer technology from file name/extension
+          case "$(basename "$VERSION_FILE")" in
+            galaxy.yml|galaxy.yaml)
+              echo "technology=ansible" >> "$GITHUB_OUTPUT"
+              ;;
+            package.json)
+              echo "technology=nodejs" >> "$GITHUB_OUTPUT"
+              ;;
+            pyproject.toml|setup.py)
+              echo "technology=python" >> "$GITHUB_OUTPUT"
+              ;;
+            Cargo.toml)
+              echo "technology=rust" >> "$GITHUB_OUTPUT"
+              ;;
+            VERSION|version.txt)
+              echo "technology=generic" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              # Fallback for unknown file types: write version only
+              echo "technology=manual" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
         else
           # Auto-detect technology in priority order
           if [ -f "galaxy.yml" ]; then
