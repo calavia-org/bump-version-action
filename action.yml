@@ -29,10 +29,13 @@ inputs:
 outputs:
   new-version:
     description: The new version after bumping
+    value: ${{ steps.bump.outputs.new_version }}
   version-file:
     description: The detected or provided version file path
+    value: ${{ steps.detect.outputs.version_file }}
   technology:
     description: The detected technology (ansible, nodejs, python, rust, generic, manual)
+    value: ${{ steps.detect.outputs.technology }}
 
 runs:
   using: composite
