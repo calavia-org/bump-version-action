@@ -1,22 +1,54 @@
-# Ansible Collection - jcalavia_org.setup
+# Bump Version Action
 
-[![codecov](https://codecov.io/gh/calavia-org/ansible-collection-setup/branch/main/graph/badge.svg?token=T5NUI2U885)](https://codecov.io/gh/calavia-org/ansible-collection-setup)
-[![Test collection](https://github.com/calavia-org/ansible-collection-setup/actions/workflows/pr.yml/badge.svg)](https://github.com/calavia-org/ansible-collection-setup/actions/workflows/pr.yml)
+A GitHub Action that bumps the version in a repository based on semantic versioning. Auto-detects the technology from common version files.
 
-This Ansbile collection is intended to be used in order to setup:
+## Supported Technologies
 
-* git
-* vim
-* tmux
+- **Ansible**: `galaxy.yml`
+- **Node.js**: `package.json`
+- **Python**: `pyproject.toml`, `setup.py`
+- **Rust**: `Cargo.toml`
+- **Generic**: `VERSION`, `version.txt`
 
-## Supported platforms
+## Usage
 
-* MacOS
-* Ubuntu / Debian
+```yaml
+- uses: calavia-org/bump-version-action@v1
+  with:
+    version-file: auto          # or explicit path like 'galaxy.yml'
+    bump-type: patch            # major, minor, or patch
+    current-version: '1.2.3'    # optional, will read from file if not provided
+```
 
-## Development
+## Inputs
 
-### Usefull commands
+| Input | Description | Required | Default |
+|-------|-------------|----------|---------|
+| `version-file` | Path to version file or `auto` for detection | No | `auto` |
+| `bump-type` | Type of bump: `major`, `minor`, `patch` | Yes | - |
+| `current-version` | Current version string | No | Read from file |
 
-* tox -e unit-py3.12-2.17 --ansible --conf tox-ansible.ini -- junit-xml=tests/reports/unit.xml
-* tox -e integration-py3.12-2.17 --ansible --conf tox-ansible.ini -- junit-xml=tests/reports/integration.xml
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `new-version` | The new version after bumping |
+| `version-file` | The detected or provided version file path |
+| `technology` | The detected technology |
+
+## Example
+
+```yaml
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: calavia-org/bump-version-action@v1
+        id: bump
+        with:
+          version-file: auto
+          bump-type: minor
+      - run: |
+          echo "New version: ${{ steps.bump.outputs.new-version }}"
+```
