@@ -1,3 +1,0 @@
----
-tmux_target_config: '{{ tmux_config }}'
-tmux_plugins_dir: '{{ tmux_tpm_path | dirname }}'

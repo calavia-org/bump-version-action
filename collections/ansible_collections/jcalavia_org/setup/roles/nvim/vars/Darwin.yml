@@ -1,4 +1,0 @@
----
-nvim_privilege_escalation: false
-nvim_os_pkgs:
-  - neovim

@@ -1,6 +1,0 @@
----
-- name: 'Deploy opencode.json'
-  ansible.builtin.template:
-    src: opencode.json.j2
-    dest: '{{ opencode_config_dir }}/opencode.json'
-    mode: '0644'
